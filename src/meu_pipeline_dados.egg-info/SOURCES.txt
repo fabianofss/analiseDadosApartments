@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+src/__init__.py
+src/pipeline.py
+src/meu_pipeline_dados.egg-info/PKG-INFO
+src/meu_pipeline_dados.egg-info/SOURCES.txt
+src/meu_pipeline_dados.egg-info/dependency_links.txt
+src/meu_pipeline_dados.egg-info/top_level.txt
+tests/test_pipeline.py
