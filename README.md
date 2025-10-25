@@ -17,8 +17,7 @@ O objetivo é transformar dados brutos e heterogêneos de forma auditável e rep
 
 1.  **Clone o repositório:**
     ```bash
-    git clone <url-do-seu-repositorio>
-    cd meu_pipeline_dados
+    git clone fabianofss/analiseDadosApartments
     ```
 
 2.  **Crie e ative o ambiente virtual:**
@@ -35,7 +34,7 @@ O objetivo é transformar dados brutos e heterogêneos de forma auditável e rep
     pip install -r requirements.txt
     ```
 
-4.  **Execute os testes para validar o ambiente (Opcional, mas recomendado):**
+4.  **Execute os testes para validar o ambiente :**
     ```bash
     pytest
     ```
@@ -51,7 +50,3 @@ O objetivo é transformar dados brutos e heterogêneos de forma auditável e rep
 -   `reports/figuras/preco_por_quartos.png`: Gráfico de boxplot mostrando a distribuição de preços por número de quartos.
 -   `reports/figuras/preco_mediano_por_estado.png`: Gráfico de barras com o preço mediano de aluguel para os 15 estados com mais anúncios.
 -   `reports/relatorio.md`: Relatório técnico detalhando as decisões, análises e conclusões.
-
-## 5. Limitações e Próximos Passos
-
-Consulte o `reports/relatorio.md` para uma discussão detalhada sobre as limitações do estudo e sugestões para trabalhos futuros.
