@@ -39,9 +39,10 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     """Limpa e padroniza os dados."""
     logging.info("Iniciando a limpeza dos dados...")
     
-    # Remover duplicatas baseadas no ID
+    # Remover duplicatas baseadas no ID e no endereço
     initial_rows = len(df)
-    df.drop_duplicates(subset='id', inplace=True)
+    df.drop_duplicates(subset=['id'], inplace=True)
+    df.drop_duplicates(subset=['address'], inplace=True)
     logging.info(f"{initial_rows - len(df)} linhas duplicadas removidas.")
 
     # Converter colunas numéricas, tratando erros.
