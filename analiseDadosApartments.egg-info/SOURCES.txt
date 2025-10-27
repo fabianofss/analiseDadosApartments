@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+analiseDadosApartments.egg-info/PKG-INFO
+analiseDadosApartments.egg-info/SOURCES.txt
+analiseDadosApartments.egg-info/dependency_links.txt
+analiseDadosApartments.egg-info/top_level.txt
+src/__init__.py
+src/pipeline.py
+tests/test_pipeline.py

@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: analiseDadosApartments
+Version: 0.1.1
+Summary: Um pipeline para análise de dados de reservas de hotel.
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10

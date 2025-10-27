@@ -39,23 +39,47 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     """Limpa e padroniza os dados."""
     logging.info("Iniciando a limpeza dos dados...")
     
-    # Remover duplicatas baseadas no ID e no endereço
+    # Remover duplicatas baseadas no ID
     initial_rows = len(df)
     df.drop_duplicates(subset=['id'], inplace=True)
-    df.drop_duplicates(subset=['address'], inplace=True)
+    rows_after_id_dedup = len(df)
     logging.info(f"{initial_rows - len(df)} linhas duplicadas removidas.")
+
+    # Remover duplicatas de endereço (anúncios diferentes para o mesmo local) antendo o primeiro que aparecer.
+    # Tratar endereços nulos antes, senão eles podem ser todos removidos como duplicatas um do outro.
+    df_with_address = df[df['address'].notna()]
+    df_no_address = df[df['address'].isna()]
+    
+    df_with_address = df_with_address.drop_duplicates(subset=['address'], keep='first')
+    
+    # Recombinar os dados
+    df = pd.concat([df_with_address, df_no_address], ignore_index=True)
+    
+    logging.info(f"{rows_after_id_dedup - len(df)} linhas duplicadas por Endereço removidas.")
 
     # Converter colunas numéricas, tratando erros.
     # A string 'null' aparece nos dados. Vamos substituir por NaN.
     # O preço tem '$' e ','. Tem que remover.
-    if 'price' in df.columns:
-        df['price'] = df['price'].astype(str).str.replace(',', '', regex=False)
-        df['price'] = df['price'].astype(str).str.replace('$', '', regex=False)
-        df['price'] = pd.to_numeric(df['price'], errors='coerce')
-    if 'square_feet' in df.columns:
-        df['square_feet'] = df['square_feet'].astype(str).str.replace(',', '', regex=False)
-        df['square_feet'] = pd.to_numeric(df['square_feet'], errors='coerce')
-    
+    #if 'price' in df.columns:
+    #    df['price'] = df['price'].astype(str).str.replace(',', '', regex=False)
+    #    df['price'] = df['price'].astype(str).str.replace('$', '', regex=False)
+    #    df['price'] = pd.to_numeric(df['price'], errors='coerce')
+    #if 'square_feet' in df.columns:
+    #    df['square_feet'] = df['square_feet'].astype(str).str.replace(',', '', regex=False)
+    #    df['square_feet'] = pd.to_numeric(df['square_feet'], errors='coerce')
+    cols_to_numeric = ['price', 'square_feet', 'bathrooms', 'bedrooms']
+    for col in cols_to_numeric:
+        if col in df.columns:
+            # Substituir strings comuns que representam nulos
+            df[col] = df[col].replace(['null', 'None'], np.nan)
+            
+            # Limpar caracteres não numéricos (para 'price' e 'square_feet')
+            if df[col].dtype == 'object':
+                df[col] = df[col].str.replace(r'[$,]', '', regex=True)
+            
+            # Converter para numérico, forçando erros para NaN
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+
     # Tratar `bathrooms` e `bedrooms`. A amostra mostra 'null' e números.
     if 'bathrooms' in df.columns:
         df['bathrooms'] = pd.to_numeric(df['bathrooms'], errors='coerce')
@@ -78,6 +102,9 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     if 'bathrooms' in df.columns:
         df['bathrooms'] = df['bathrooms'].astype(int)
         df['bedrooms'] = df['bedrooms'].astype(int)
+
+    # Remover linhas onde colunas críticas para a análise são nulas
+    df.dropna(subset=['price', 'square_feet'], inplace=True)
 
     if 'has_photo' in df.columns:
         # na coluna has_photo, está informado yes, no e thumbnail, vamos padronizar thumbnail para yes
